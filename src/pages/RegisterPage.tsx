@@ -1,33 +1,32 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import api from '../api/axios';
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await api.post('/auth/login', { email, password });
-      login(response.data.user);
-      navigate('/dashboard');
+      await api.post('/auth/register', { fullName, email, password });
+      alert('Registration successful. Please login.');
+      navigate('/login');
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.msg || 'Login failed');
+      setError(err.response?.data?.msg || 'Registration failed');
     }
   };
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #e0f2fe, #c7d2fe)',
+      background: 'linear-gradient(to bottom right, #f3e8ff, #e0e7ff)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -43,15 +42,15 @@ const LoginPage = () => {
         transition: 'transform 0.3s ease',
       }}>
         <div style={{
-          background: 'linear-gradient(to right, #2563eb, #4f46e5)',
+          background: 'linear-gradient(to right, #9333ea, #4f46e5)',
           padding: '24px',
           textAlign: 'center',
         }}>
-          <h1 style={{ fontSize: '24px', color: '#fff', fontWeight: 'bold' }}>Quotation Builder</h1>
-          <p style={{ color: '#cbd5e1', marginTop: '4px' }}>Sign in to your account</p>
+          <h1 style={{ fontSize: '24px', color: '#fff', fontWeight: 'bold' }}>Create Account</h1>
+          <p style={{ color: '#ddd', marginTop: '4px' }}>Get started with your free account</p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ padding: '32px' }}>
+        <form onSubmit={handleRegister} style={{ padding: '32px' }}>
           {error && (
             <div style={{
               backgroundColor: '#fee2e2',
@@ -64,6 +63,24 @@ const LoginPage = () => {
               {error}
             </div>
           )}
+
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Full Name</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid #ccc',
+                borderRadius: '8px',
+                outline: 'none',
+                transition: 'border 0.2s',
+              }}
+            />
+          </div>
 
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500' }}>Email</label>
@@ -106,7 +123,7 @@ const LoginPage = () => {
             style={{
               width: '100%',
               padding: '12px',
-              background: 'linear-gradient(to right, #2563eb, #4f46e5)',
+              background: 'linear-gradient(to right, #9333ea, #4f46e5)',
               color: '#fff',
               fontWeight: 'bold',
               borderRadius: '8px',
@@ -116,22 +133,22 @@ const LoginPage = () => {
             }}
             onMouseOver={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
-              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(to right, #1e40af, #4338ca)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(to right, #7e22ce, #4338ca)';
             }}
             onMouseOut={e => {
               (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(to right, #2563eb, #4f46e5)';
+              (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(to right, #9333ea, #4f46e5)';
             }}
           >
-            Sign In
+            Register
           </button>
 
           <p style={{ textAlign: 'center', fontSize: '14px', marginTop: '16px' }}>
-            Don&apos;t have an account?{' '}
+            Already have an account?{' '}
             <Link
-              to="/register"
+              to="/login"
               style={{
-                color: '#2563eb',
+                color: '#6b21a8',
                 textDecoration: 'none',
                 fontWeight: '500',
               }}
@@ -142,7 +159,7 @@ const LoginPage = () => {
                 (e.currentTarget as HTMLAnchorElement).style.textDecoration = 'none';
               }}
             >
-              Sign up
+              Sign in
             </Link>
           </p>
         </form>
@@ -151,4 +168,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
