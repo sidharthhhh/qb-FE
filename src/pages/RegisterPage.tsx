@@ -14,7 +14,13 @@ const RegisterPage = () => {
     setError('');
 
     try {
-      await api.post('/auth/register', { fullName, email, password });
+      // 👇 send full_name for backend compatibility
+      await api.post('/auth/register', {
+        full_name: fullName,
+        email,
+        password
+      });
+
       alert('Registration successful. Please login.');
       navigate('/login');
     } catch (err: any) {
@@ -77,7 +83,6 @@ const RegisterPage = () => {
                 border: '1px solid #ccc',
                 borderRadius: '8px',
                 outline: 'none',
-                transition: 'border 0.2s',
               }}
             />
           </div>
@@ -95,7 +100,6 @@ const RegisterPage = () => {
                 border: '1px solid #ccc',
                 borderRadius: '8px',
                 outline: 'none',
-                transition: 'border 0.2s',
               }}
             />
           </div>
@@ -113,7 +117,6 @@ const RegisterPage = () => {
                 border: '1px solid #ccc',
                 borderRadius: '8px',
                 outline: 'none',
-                transition: 'border 0.2s',
               }}
             />
           </div>
